@@ -6,8 +6,8 @@
  * Version: 1.0
  * Requires at least: 5.0
  * Requires PHP: 5.6.20
- * Author: Philip Rudy
- * Author URI: https://philiparudy.org/
+ * Author: Thomas Rudy
+ * Author URI: https://thomasrudy.com/
  * License: GPLv2
  * License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * Text Domain: sparkloop-forms
