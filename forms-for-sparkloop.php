@@ -1,13 +1,13 @@
 <?php
 /**
- * Plugin Name: Forms for Sparkloop
+ * Plugin Name: forms for sparkloop
  * Plugin URI: https://github.com/outsellers/forms-for-sparkloop
  * Description: A simple newsletter signup and Sendgrid/Sparkloop integration.
  * Version: 1.0
  * Requires at least: 5.0
  * Requires PHP: 5.6.20
  * Author: Philip Rudy
- * Author URI: https://philiparudy.org/
+ * Author URI: https://philiparudy.com/
  * License: GPLv2
  * License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * Text Domain: sparkloop-forms
@@ -101,21 +101,27 @@ class SparkLoopForms {
     }
 
     /**
-     * Add the sparkloop script
+     * Add the reCAPTCHA and sparkloop script
      *
      * @return void
      */
     public function enqueue_sparkloop_wp_head() {
-        if($this->sparkloop_id && $this->recaptcha_key) {
+        if($this->recaptcha_key) {
             echo '
-            <script async src="https://js.sparkloop.app/team_'.$this->sparkloop_id.'.js" data-sparkloop></script>
-            <script src="https://www.google.com/recaptcha/api.js?render='.$this->recaptcha_key.'"></script>
-        ';
+                <script src="https://www.google.com/recaptcha/api.js?render='.$this->recaptcha_key.'"></script>
+            ';
         } else {
             echo '
             <script type="text/javascript">
-                console.log("Missing at least one of the required keys.");
-            </script>';
+                console.log("Missing the required reCAPTCHA script.");
+            </script>
+            ';
+        }
+
+        if($this->sparkloop_id) {
+            echo '
+            <script async src="https://js.sparkloop.app/team_'.$this->sparkloop_id.'.js" data-sparkloop></script>
+            ';
         }
     }
 
