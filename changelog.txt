@@ -1,0 +1,10 @@
+# Changelog
+
+## [0.1.0] - 2023-10-13
+
+### Added
+- Initial Release of the plugin
+- Added admin menu for API keys
+- Added a shortcode [sparkloop_form] for a newsletter signup
+- Added Integration with Sendgrid API
+- Added ability to add a contact to a Sendgrid list

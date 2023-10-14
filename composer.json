@@ -1,0 +1,20 @@
+{
+    "name": "phili/forms-for-sparkloop",
+    "description": "Pushes forms to compatible Spark Loop partners",
+    "type": "wp-plugin",
+    "license": "GLPLv2",
+    "autoload": {
+        "psr-4": {
+            "Phili\\SparkloopForms\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "milliephanillie",
+            "email": "me@philiparudy.com"
+        }
+    ],
+    "require": {
+        "sendgrid/sendgrid": "~7"
+    }
+}
