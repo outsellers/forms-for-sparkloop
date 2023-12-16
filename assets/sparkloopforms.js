@@ -3,8 +3,6 @@ addEventListener('DOMContentLoaded', function() {
     const site_url = window.spl_site_data?.site_url;
     const assets_url = window.spl_site_data?.assets_url;
 
-    console.log(sparkLoopForms)
-
     if(sparkLoopForms) {
         sparkLoopForms.forEach(sparkLoopForm => {
             sparkLoopForm.addEventListener('submit', (e) => {
@@ -19,11 +17,10 @@ addEventListener('DOMContentLoaded', function() {
                         const formData = new FormData(sparkLoopForm);
                         const email = formData.get('email');
                         const _wpnonce = document.getElementById('_wpnonce');
-                        const nonceValue = _wpnonce.value;
+                        const nonceValue = spl_site_data.nonce;
 
                         data = {
                             email: email,
-                            _wpnonce: nonceValue
                         }
 
                         if (formWrapper) {
@@ -40,6 +37,7 @@ addEventListener('DOMContentLoaded', function() {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
+                                "X-WP-Nonce": nonceValue,
                             },
                             body: JSON.stringify(data)
                         })
@@ -47,6 +45,9 @@ addEventListener('DOMContentLoaded', function() {
                             .then(data => {
                                 let formWrapper = document.getElementById('sparkLoopForm-' + count);
                                 let statusClass, statusMessage;
+
+                                console.log("the data")
+                                console.log(data)
 
                                 if (data.errors) {
                                     statusClass = "sparkloop-forms--error";

@@ -2,17 +2,17 @@
 /*
  * AdminMenu Class
  */
-class AdminMenu
+class FFSL_AdminMenu
 {
-    const PAGE_IDENTIFIER   = 'sparkloop_forms';
+    const PAGE_IDENTIFIER   = 'forms_for_sparkloop';
     const PAGE_TEMPLATE     = 'dashboard';
-    const SETTINGS_PAGE     = 'sparkloop_forms-settings';
+    const SETTINGS_PAGE     = 'forms_for_sparkloop-settings';
     const DASHICON          = 'dashicons-controls-repeat';
 
     /**
      * @var string
      */
-    private $option_group = 'sparkloop_forms_settings';
+    private $option_group = 'forms_for_sparkloop_settings';
 
     /**
      * @var string
@@ -35,7 +35,7 @@ class AdminMenu
      * Constructor for Bluefield options
      */
     public function __construct() {
-        $this->prefix = Options::PREFIX;
+        $this->prefix = FFSL_Options::PREFIX;
         $this->option_group = $this->option_group;
 
         $this->register_hooks();
@@ -53,7 +53,7 @@ class AdminMenu
     }
 
 //    public function remove_duplicate_submenu() {
-//        remove_submenu_page('admin.php?page=sparkloop_forms', 'sparkloop_forms');
+//        remove_submenu_page('admin.php?page=forms_for_sparkloop', 'forms_for_sparkloop');
 //    }
 
     /**
@@ -67,7 +67,7 @@ class AdminMenu
         $page_identifier = $this->get_page_identifier();
 
         add_menu_page(
-            'sparkloop forms: ' . __('Dashboard', 'sparkloop-forms'),
+            'sparkloop forms: ' . __('Dashboard', 'forms-for-sparkloop'),
             'sparkloop forms',
             $manage_capability,
             $page_identifier,
@@ -78,7 +78,7 @@ class AdminMenu
 
         add_submenu_page(
             $page_identifier,
-            'sparkloop forms: ' . __('Settings', 'sparkloop-forms'),
+            'sparkloop forms: ' . __('Settings', 'forms-for-sparkloop'),
             __('Settings', 'sparkloop-forms'),
             $manage_capability,
             self::SETTINGS_PAGE,
@@ -162,7 +162,7 @@ class AdminMenu
      */
     public function show_page()
     {
-        require_once SPARKLOOP_FORMS_PATH . 'pages/' . self::PAGE_TEMPLATE . '.php';
+        require_once FFSL_PATH . 'pages/' . self::PAGE_TEMPLATE . '.php';
     }
 
     /**
@@ -178,7 +178,7 @@ class AdminMenu
     public function recaptcha_key_callback() {
         $option_name = $this->prefix . $this->option_names[0];
 
-        echo "<input style='width: 600px' id='" . $option_name . "' name='" . $option_name . "' type='text' value='" . esc_attr(Options::get_option($option_name)) . "' placeholder='Google reCAPTCHA v3 Site Key' />";
+        echo "<input style='width: 600px' id='" . esc_attr($option_name) . "' name='" . esc_attr($option_name) . "' type='text' value='" . esc_attr(FFSL_Options::get_option($option_name)) . "' placeholder='Google reCAPTCHA v3 Site Key' />";
     }
 
     /**
@@ -186,7 +186,7 @@ class AdminMenu
      */
     public function remote_key_callback() {
         $option_name = $this->prefix . $this->option_names[1];
-        echo "<input style='width: 600px' id='" . $option_name . "' name='" . $option_name . "' type='text' value='" . esc_attr(Options::get_option($option_name)) . "' placeholder='Sendgrid API Key' />";
+        echo "<input style='width: 600px' id='" . esc_attr($option_name) . "' name='" . esc_attr($option_name) . "' type='text' value='" . esc_attr(FFSL_Options::get_option($option_name)) . "' placeholder='Sendgrid API Key' />";
     }
 
     /**
@@ -195,7 +195,7 @@ class AdminMenu
     public function list_id_callback() {
         $option_name = $this->prefix . $this->option_names[2];
 
-        echo "<input style='width: 600px' id='" . $option_name . "' name='" . $option_name . "' type='text' value='" . esc_attr(Options::get_option($option_name)) . "' placeholder='Sendgrid List ID' />";
+        echo "<input style='width: 600px' id='" . esc_attr($option_name) . "' name='" . esc_attr($option_name) . "' type='text' value='" . esc_attr(FFSL_Options::get_option($option_name)) . "' placeholder='Sendgrid List ID' />";
     }
 
     /**
@@ -206,6 +206,6 @@ class AdminMenu
 
         echo "
         <label style='display: block; width: 600px; margin-bottom: 3px;'>This is the unique alphenumeric ID that you can sometimes find in your Sparkloop tracking link.</label>
-        <input style='width: 600px' id='" . $option_name . "' name='" . $option_name . "' type='text' value='" . esc_attr(Options::get_option($option_name)) . "' placeholder='sparkloop ID' />";
+        <input style='width: 600px' id='" . esc_attr($option_name) . "' name='" . esc_attr($option_name) . "' type='text' value='" . esc_attr(FFSL_Options::get_option($option_name)) . "' placeholder='sparkloop ID' />";
     }
 }

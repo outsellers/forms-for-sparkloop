@@ -1,19 +1,19 @@
 <?php return array(
     'root' => array(
-        'name' => 'phili/sparkloop-forms',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => NULL,
+        'name' => 'phili/forms-for-sparkloop',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '52120b20cad46a9fbb90f3ce950f5a7b10fb227a',
         'type' => 'wp-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
-        'phili/sparkloop-forms' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => NULL,
+        'phili/forms-for-sparkloop' => array(
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '52120b20cad46a9fbb90f3ce950f5a7b10fb227a',
             'type' => 'wp-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

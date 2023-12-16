@@ -4,6 +4,7 @@ License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl.html
 Tags: Newsletter, Affiliate Marketing
 Tested up to: 6.3
+Stable tag: 1.0.0
 Requires PHP: 5.6.20
 
 Easily create a signup form fully integrated with Sparkloop's newsletter recommendation engine - all with a simple shortcode.
@@ -19,6 +20,14 @@ You will need to do a few things to set up the plugin; however it does not requi
 Instead this is the only WordPress plugin you will need to start seeing metrics in your Sparkloop dashboard.
 
 Use [sparkloop_form] anywhere on your site, and it will generate a newsletter subscription form.
+
+#### Third Party Services & Disclosures
+
+In addition to Sparkloop, this plugin uses several third party services.
+
+* Main integration with Sparkloop - [Terms of Service](https://sparkloop.app/policies/terms)
+* Use of Google reCAPTCHA v3 for spam protection - [Terms of Service](https://cloud.google.com/terms/service-terms-20190701)
+* Use of Sendgrid - [Terms of Service](https://www.twilio.com/en-us/legal/tos)
 
 #### FEATURES
 * Easily integrate Sparkloop's script

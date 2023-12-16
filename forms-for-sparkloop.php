@@ -10,7 +10,7 @@
  * Author URI: https://philiparudy.org/
  * License: GPLv2
  * License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * Text Domain: sparkloop-forms
+ * Text Domain: forms-for-sparkloop
  * Domain Path: /languages/
  */
 
@@ -18,25 +18,24 @@ if(!defined('ABSPATH')) {
     exit;
 }
 
-define('SPARKLOOP_FORMS', __FILE__);
+define('FORMS_FOR_SPARKLOOP', __FILE__);
 
-if ( ! defined( 'SPARKLOOP_FORMS_PATH' ) ) {
-    define( 'SPARKLOOP_FORMS_PATH', plugin_dir_path( SPARKLOOP_FORMS ) );
+if ( ! defined( 'FFSL_PATH' ) ) {
+    define( 'FFSL_PATH', plugin_dir_path( FORMS_FOR_SPARKLOOP ) );
 }
 
-if ( ! defined( 'PLUGIN_URL' ) ) {
-    define( 'PLUGIN_URL', plugin_dir_url( SPARKLOOP_FORMS ) );
+if ( ! defined( 'FFSL_PLUGIN_URL' ) ) {
+    define( 'FFSL_PLUGIN_URL', plugin_dir_url( FORMS_FOR_SPARKLOOP ) );
 }
 
 require 'vendor/autoload.php';
 require_once 'class-options.php';
 require_once 'admin-menu.php';
-require_once 'email-test.php';
 
-$options = new Options();
-$admin_menu = new AdminMenu();
+$options = new FFSL_Options();
+$admin_menu = new FFSL_AdminMenu();
 
-class SparkLoopForms {
+class FormsForSparkloop {
     /**
      * @see https://developers.google.com/recaptcha/docs/v3
      *
@@ -64,7 +63,7 @@ class SparkLoopForms {
     private $sparkloop_id = '';
 
     /**
-     * SparkLoopForms constructor
+     * FormsForSparkloop constructor
      */
     public function __construct() {
         $this->init();
@@ -90,14 +89,14 @@ class SparkLoopForms {
      * @return void
      */
     public function set_keys() {
-        $this->recaptcha_key = Options::get_option('recaptcha_key');
-        $this->sendgrid_api_key = Options::get_option('remote_key');
-        $list_ids = Options::get_option('list_ids');
+        $this->recaptcha_key = FFSL_Options::get_option('recaptcha_key');
+        $this->sendgrid_api_key = FFSL_Options::get_option('remote_key');
+        $list_ids = FFSL_Options::get_option('list_ids');
         if(!is_array($list_ids)) {
             $list_ids = [$list_ids];
         }
         $this->sendgrid_list_ids = array_merge($this->sendgrid_list_ids, $list_ids);
-        $this->sparkloop_id = Options::get_option('sparkloop_id');
+        $this->sparkloop_id = FFSL_Options::get_option('sparkloop_id');
     }
 
     /**
@@ -108,8 +107,8 @@ class SparkLoopForms {
     public function enqueue_sparkloop_wp_head() {
         if($this->sparkloop_id && $this->recaptcha_key) {
             echo '
-            <script async src="https://js.sparkloop.app/team_'.$this->sparkloop_id.'.js" data-sparkloop></script>
-            <script src="https://www.google.com/recaptcha/api.js?render='.$this->recaptcha_key.'"></script>
+            <script async src="https://js.sparkloop.app/team_'.esc_html($this->sparkloop_id).'.js" data-sparkloop></script>
+            <script src="https://www.google.com/recaptcha/api.js?render='.esc_html($this->recaptcha_key).'"></script>
         ';
         } else {
             echo '
@@ -125,13 +124,14 @@ class SparkLoopForms {
      * @return void
      */
     public function enqueue_scripts() {
-        wp_enqueue_style('sparkloop-form-css', plugin_dir_url(SPARKLOOP_FORMS) . 'assets/sparkloopforms.css', [], null, 'all');
+        wp_enqueue_style('sparkloop-form-css', plugin_dir_url(FORMS_FOR_SPARKLOOP) . 'assets/sparkloopforms.css', [], null, 'all');
 
-        wp_enqueue_script('sparkloop-form-js', plugin_dir_url(SPARKLOOP_FORMS) . 'assets/sparkloopforms.js', [], null, true);
+        wp_enqueue_script('sparkloop-form-js', plugin_dir_url(FORMS_FOR_SPARKLOOP) . 'assets/sparkloopforms.js', [], null, true);
 
         $data_array = array(
+            'nonce' => wp_create_nonce('wp_rest'),
             'site_url' => home_url(),
-            'assets_url' => PLUGIN_URL . 'assets/',
+            'assets_url' => FFSL_PLUGIN_URL . 'assets/',
             'recaptcha_key' => $this->recaptcha_key,
         );
 
@@ -163,12 +163,11 @@ class SparkLoopForms {
     public function parse_shortcode($atts = [], $content = null) {
         static $count = 1;
         $form_wrapper_id =  "sparkLoopForm-".$count;
-        $nonce = wp_create_nonce('forms-for-sparkloop');
 
-        $output = "<div id=\"".$form_wrapper_id."\" class=\"sparkloop-forms--form-wrapper\">";
+        $output = "<div id=\"".esc_attr($form_wrapper_id)."\" class=\"sparkloop-forms--form-wrapper\">";
         if($this->recaptcha_key) {
             $output .= "
-                <form id=\"sparkLoopForm\" class=\"sparkloop-forms--form\" data-count=\"".$count."\">
+                <form id=\"sparkLoopForm\" class=\"sparkloop-forms--form\" data-count=\"".esc_html($count)."\">
                     <div class=\"sparkloop-form--input-element\">
                         <label>Email <span class=\"required\">*</span></label>
                         <input
@@ -179,15 +178,9 @@ class SparkLoopForms {
                         placeholder=\"Email\"
                         value=\"\" />
 
-                        <input
-                        id=\"_wpnonce\"
-                        type=\"hidden\"
-                        name=\"_wpnonce\"
-                        value=\"".$nonce."\"
-                        >
                         <button
                         type=\"submit\"
-                        data-recaptcha-key=". $this->recaptcha_key .">
+                        data-recaptcha-key=". esc_html($this->recaptcha_key) .">
                             Sign up
                         </button>
                     </div>
@@ -225,15 +218,6 @@ class SparkLoopForms {
             'callback' => [$this, 'process_sparkloop_form'],
             'permission_callback' => '__return_true',
         ]);
-
-        $namespace = 'sparkloopforms';
-        $route = 'sendgrid/scopes';
-
-        register_rest_route($namespace, $route, [
-            'methods' => WP_REST_Server::CREATABLE,
-            'callback' => [$this, 'get_scopes'],
-            'permission_callback' => '__return_true',
-        ]);
     }
 
     /**
@@ -245,28 +229,18 @@ class SparkLoopForms {
     public function process_sparkloop_form(\WP_REST_Request $request) {
 
         $params = $request->get_params();
-        $nonce = $params['_wpnonce'];
-        $email = $params['email'] ?? null;
-
-        if(!wp_verify_nonce($nonce, 'forms-for-sparkloop')) {
-            return new WP_REST_Response(
-                [
-                    "nonce"  => $nonce,
-                    "nonce_verify" => wp_verify_nonce($nonce, 'forms-for-sparkloop')
-                ]
-            );
-            die('Security check failed.');
-        }
+        $nonce = $params['_wpnonce'] ?? null;
+        $email = sanitize_email($params['email']) ?? null;
 
         if(!$email || false === filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return new WP_Error(
-                'sparkloop_forms', 'The email is not valid.'
+                'forms_for_sparkloop', 'The email is not valid.'
             );
         }
 
        if(!$added = $this->add_subscriber($email)) {
             return new WP_Error(
-                'sparkloop_forms', 'Failed to add to our own list.'
+                'forms_for_sparkloop', 'Failed to add to our own list.'
             );
         }
 
@@ -288,7 +262,11 @@ class SparkLoopForms {
      *
      * @param string $email The email to be added.
      */
-    public function add_email_to_sendgrid_list($email) {
+    public function add_email_to_sendgrid_list($email = null) {
+        if (! $email ||!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return; // Invalid email
+        }
+
         $api_key = $this->sendgrid_api_key;
         $list_ids = $this->sendgrid_list_ids;
         $sg = new \SendGrid($api_key);
@@ -304,32 +282,29 @@ class SparkLoopForms {
         try {
             $response = $sg->client->marketing()->contacts()->put($request_body);;
         } catch (Exception $ex) {
-            echo 'Caught exception: '.  $ex->getMessage();
+            error_log(print_r($ex->getMessage(), true));
 
-            return new WP_Error(
-                'sparkloop_forms', $ex->getMessage()
+            return \WP_Error(
+                'forms_for_sparkloop',
+                'Unknown error while attempting to add the email to the Sendgrid List.'
             );
-        }
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return; // Invalid email
         }
 
         return $response;
     }
 
     /**
-     * Add sub to WP database in options table (meta_kay = sparkloop_forms__subscribers)
+     * Add sub to WP database in options table (meta_kay = forms_for_sparkloop__subscribers)
      *
      * @param $email
      * @return bool
      */
-    public function add_subscriber($email) {
+    public function add_subscriber($email = null) {
         if( ! $email || ! filter_var($email, FILTER_VALIDATE_EMAIL) ) {
             return false;
         }
 
-        $email_list = Options::get_option('subscribers', []);
+        $email_list = FFSL_Options::get_option('subscribers', []);
 
         if(!is_array($email_list)) {
             $email_list = [];
@@ -341,30 +316,8 @@ class SparkLoopForms {
 
         $email_list[] = $email;
 
-        return Options::update_option('subscribers', $email_list);
-    }
-
-    /**
-     * Check scopes for users
-     *
-     * @return void
-     */
-    public function get_scopes() {
-        $apiKey = $this->sendgrid_api_key;
-        $sg = new \SendGrid($apiKey);
-
-        try {
-            $response = $sg->client->scopes()->get();
-        } catch (Exception $ex) {
-            echo 'Caught exception: '.  $ex->getMessage();
-        }
-
-        return rest_ensure_response(
-            new \WP_REST_Response([
-                $response,
-            ])
-        );
+        return FFSL_Options::update_option('subscribers', $email_list);
     }
 }
 
-$sparkLoopForms = new SparkLoopForms();
+$sparkLoopForms = new FormsForSparkloop();

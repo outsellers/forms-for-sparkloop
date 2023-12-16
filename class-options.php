@@ -2,8 +2,8 @@
 /**
  * Main wrapper class for WordPress option functions
  */
-class Options {
-    const PREFIX = 'sparkloop_forms__';
+class FFSL_Options {
+    const PREFIX = 'forms_for_sparkloop__';
 
     /**
      * Wrapper for WP's get_option

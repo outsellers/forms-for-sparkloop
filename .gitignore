@@ -56,3 +56,5 @@ __pycache__/
 .Trashes
 *.swp
 *.thumb
+
+forms-for-sparkloop.env
