@@ -32,3 +32,11 @@ Use [sparkloop_form] anywhere on your site, and it will generate a newsletter su
 * Sync with a Sendgrid contact list
 * Use shortcode [sparkloop_form]
 
+#### Third Party Services & Disclosures
+
+In addition to Sparkloop, this plugin uses several third party services.
+
+* Main integration with Sparkloop - [Terms of Service](https://sparkloop.app/policies/terms)
+* Use of Google reCAPTCHA v3 for spam protection - [Terms of Service](https://cloud.google.com/terms/service-terms-20190701)
+* Use of Sendgrid - [Terms of Service](https://www.twilio.com/en-us/legal/tos)
+
