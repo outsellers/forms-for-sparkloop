@@ -3,7 +3,7 @@
  * Plugin Name: Forms for Sparkloop
  * Plugin URI: https://github.com/outsellers/forms-for-sparkloop
  * Description: A simple newsletter signup and Sendgrid/Sparkloop integration.
- * Version: 1.0
+ * Version: 1.0.0
  * Requires at least: 5.0
  * Requires PHP: 5.6.20
  * Author: Philip Rudy
@@ -18,14 +18,14 @@ if(!defined('ABSPATH')) {
     exit;
 }
 
-define('FORMS_FOR_SPARKLOOP', __FILE__);
+define('FFSL_PLUGIN', __FILE__);
 
 if ( ! defined( 'FFSL_PATH' ) ) {
-    define( 'FFSL_PATH', plugin_dir_path( FORMS_FOR_SPARKLOOP ) );
+    define( 'FFSL_PATH', plugin_dir_path( FFSL_PLUGIN ) );
 }
 
 if ( ! defined( 'FFSL_PLUGIN_URL' ) ) {
-    define( 'FFSL_PLUGIN_URL', plugin_dir_url( FORMS_FOR_SPARKLOOP ) );
+    define( 'FFSL_PLUGIN_URL', plugin_dir_url( FFSL_PLUGIN ) );
 }
 
 require 'vendor/autoload.php';
@@ -35,7 +35,7 @@ require_once 'admin-menu.php';
 $options = new FFSL_Options();
 $admin_menu = new FFSL_AdminMenu();
 
-class FormsForSparkloop {
+class FFSL_FormsForSparkloop {
     /**
      * @see https://developers.google.com/recaptcha/docs/v3
      *
@@ -63,7 +63,7 @@ class FormsForSparkloop {
     private $sparkloop_id = '';
 
     /**
-     * FormsForSparkloop constructor
+     * FFSL_FormsForSparkloop constructor
      */
     public function __construct() {
         $this->init();
@@ -80,7 +80,7 @@ class FormsForSparkloop {
         add_action('rest_api_init', [$this, 'register_rest_route']);
         add_action('wpforms_process_complete', [$this, 'on_wpforms_submission'], 10, 4);
         add_action('wp_enqueue_scripts', [$this, 'enqueue_scripts']);
-        add_action('wp_head', [$this, 'enqueue_sparkloop_wp_head']);
+        add_action('wp_enqueue_scripts', [$this, 'enqueue_sparkloop_wp_head']);
     }
 
     /**
@@ -105,18 +105,28 @@ class FormsForSparkloop {
      * @return void
      */
     public function enqueue_sparkloop_wp_head() {
-        if($this->sparkloop_id && $this->recaptcha_key) {
-            echo '
-            <script async src="https://js.sparkloop.app/team_'.esc_html($this->sparkloop_id).'.js" data-sparkloop></script>
-            <script src="https://www.google.com/recaptcha/api.js?render='.esc_html($this->recaptcha_key).'"></script>
-        ';
+        if ($this->sparkloop_id && $this->recaptcha_key) {
+            wp_enqueue_script(
+                'sparkloop-script',
+                'https://js.sparkloop.app/team_' . esc_attr($this->sparkloop_id) . '.js',
+                array(),
+                null,
+                false
+            );
+
+            wp_enqueue_script(
+                'google-recaptcha',
+                'https://www.google.com/recaptcha/api.js?render=' . esc_attr($this->recaptcha_key),
+                array(),
+                null,
+                false
+            );
+
         } else {
-            echo '
-            <script type="text/javascript">
-                console.log("Missing at least one of the required keys.");
-            </script>';
+            wp_add_inline_script('jquery', 'console.log("Missing at least one of the required keys.");');
         }
     }
+
 
     /**
      * Enqueue our scripts and styles
@@ -124,9 +134,9 @@ class FormsForSparkloop {
      * @return void
      */
     public function enqueue_scripts() {
-        wp_enqueue_style('sparkloop-form-css', plugin_dir_url(FORMS_FOR_SPARKLOOP) . 'assets/sparkloopforms.css', [], null, 'all');
+        wp_enqueue_style('sparkloop-form-css', plugin_dir_url(FFSL_PLUGIN) . 'assets/sparkloopforms.css', [], null, 'all');
 
-        wp_enqueue_script('sparkloop-form-js', plugin_dir_url(FORMS_FOR_SPARKLOOP) . 'assets/sparkloopforms.js', [], null, true);
+        wp_enqueue_script('sparkloop-form-js', plugin_dir_url(FFSL_PLUGIN) . 'assets/sparkloopforms.js', [], null, true);
 
         $data_array = array(
             'nonce' => wp_create_nonce('wp_rest'),
@@ -151,7 +161,7 @@ class FormsForSparkloop {
      * @return void
      */
     public function sparkloop_add_shortcode() {
-        add_shortcode('sparkloop_form', [$this, 'parse_shortcode']);
+        add_shortcode('ffsl_sparkloop_form', [$this, 'parse_shortcode']);
     }
 
     /**
@@ -320,4 +330,4 @@ class FormsForSparkloop {
     }
 }
 
-$sparkLoopForms = new FormsForSparkloop();
+$sparkLoopForms = new FFSL_FormsForSparkloop();
