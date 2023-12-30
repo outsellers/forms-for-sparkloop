@@ -1,10 +1,16 @@
 # Changelog
 
-## [0.1.0] - 2023-10-13
+## [1.0.1] - 2023-10-13
+
+### Updated
+- Refactored class names to include prefixes for improved namespace management.
+- Updated script and style enqueuing to align with WordPress best practices.
+
+## [1.0.0] - 2023-10-13
 
 ### Added
-- Initial Release of the plugin
-- Added admin menu for API keys
-- Added a shortcode [sparkloop_form] for a newsletter signup
-- Added Integration with Sendgrid API
-- Added ability to add a contact to a Sendgrid list
+- Initial Release of the plugin.
+- Added admin menu for API key configuration.
+- Implemented `[ffsl_sparkloop_form]` shortcode for newsletter signup.
+- Integrated with Sendgrid API.
+- Enabled adding contacts to a Sendgrid list.

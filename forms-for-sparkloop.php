@@ -3,7 +3,7 @@
  * Plugin Name: Forms for Sparkloop
  * Plugin URI: https://github.com/outsellers/forms-for-sparkloop
  * Description: A simple newsletter signup and Sendgrid/Sparkloop integration.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Requires at least: 5.0
  * Requires PHP: 5.6.20
  * Author: Philip Rudy

@@ -23,14 +23,14 @@ You will need to do a few things to set up the plugin; however it does not requi
 
 Instead this is the only WordPress plugin you will need to start seeing metrics in your Sparkloop dashboard.
 
-Use [sparkloop_form] anywhere on your site, and it will generate a newsletter subscription form.
+Use [ffsl_sparkloop_form] anywhere on your site, and it will generate a newsletter subscription form.
 
 ## FEATURES
 * Easily integrate Sparkloop's script
 * Stops spam with Google reCAPTCHA v3
 * Use multiple shortcodes on the same page
 * Sync with a Sendgrid contact list
-* Use shortcode [sparkloop_form]
+* Use shortcode [ffsl_sparkloop_form]
 
 #### Third Party Services & Disclosures
 

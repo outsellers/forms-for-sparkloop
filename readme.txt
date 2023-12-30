@@ -4,7 +4,7 @@ License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl.html
 Tags: Newsletter, Affiliate Marketing
 Tested up to: 6.3
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 Requires PHP: 5.6.20
 
 Easily create a signup form fully integrated with Sparkloop's newsletter recommendation engine - all with a simple shortcode.
@@ -19,7 +19,7 @@ You will need to do a few things to set up the plugin; however it does not requi
 
 Instead this is the only WordPress plugin you will need to start seeing metrics in your Sparkloop dashboard.
 
-Use [sparkloop_form] anywhere on your site, and it will generate a newsletter subscription form.
+Use [ffsl_sparkloop_form] anywhere on your site, and it will generate a newsletter subscription form.
 
 #### Third Party Services & Disclosures
 
@@ -34,7 +34,7 @@ In addition to Sparkloop, this plugin uses several third party services.
 * Stops spam with Google reCAPTCHA v3
 * Use multiple shortcodes on the same page
 * Sync with a Sendgrid contact list
-* Use shortcode [sparkloop_form]
+* Use shortcode [ffsl_sparkloop_form]
 
 #### REQUIREMENTS
 * [Google v3 reCAPTCHA](https://yoa.st/1uv) Google v3 reCAPTCHA Site Key - For stopping spam. Only the key is needed
